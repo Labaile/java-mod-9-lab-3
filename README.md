@@ -1,64 +1,30 @@
-# Lab 3
+Instructions
+Using the same pattern we used to apply conditional formatting to the sender's avatar, apply conditional formatting to the sender's actual message, so that messages from a user who's currently online are bolded and messages from a user who is currently offline are using a lighter font weight.
 
-## Instructions
+Hints:
 
-Implement the same changes we just made for `userMessages` for our
-`senderMessages`. A few things to remember:
+Font weights can be controlled using the following Bootstrap classes: fw-bold and fw-light
+There are several other values you could use, but those 2 are sufficient to support our use case
+Your application display should look like this:
 
-1. The pattern is the same, so there shouldn't be anything you need that we
-   haven't already done together
-2. Even though we added the Event Emitter for user messages in a previous
-   section, we did not add it for sender messages, so make sure that you make
-   that change as well. Refer to the previous section to refresh your memory.
+Font Weights
 
-Here is the complete `messaging-data.service.ts`:
+Here is our sender message component after this change:
 
-```typescript
-import { Injectable, EventEmitter } from "@angular/core";
-import { LoggingService } from "./logging.service";
-import { Message } from "./message.model";
-import { HttpClient } from "@angular/common/http";
-
-@Injectable()
-export class MessagingDataService {
-  private senderMessages: Message[] = [];
-  private userMessages: Message[] = [];
-
-  userMessagesChanged = new EventEmitter<Message[]>();
-  senderMessagesChanged = new EventEmitter<Message[]>();
-
-  getSenderMessages() {
-    this.httpClient
-      .get<Message[]>("http://localhost:8080/api/get-sender-messages")
-      .subscribe((messages: Message[]) => {
-        console.log(messages);
-        this.senderMessages = messages;
-        this.senderMessagesChanged.emit(this.senderMessages);
-      });
-    return this.senderMessages.slice();
-  }
-
-  getUserMessages() {
-    this.httpClient
-      .get<Message[]>("http://localhost:8080/api/get-user-messages")
-      .subscribe((messages: Message[]) => {
-        console.log(messages);
-        this.userMessages = messages;
-        this.userMessagesChanged.emit(this.userMessages);
-      });
-    return this.userMessages.slice();
-  }
-
-  addUserMessage(newMessage: Message) {
-    this.userMessages.push(newMessage);
-    this.userMessagesChanged.emit(this.userMessages.slice());
-  }
-
-  constructor(
-    private loggingSvce: LoggingService,
-    private httpClient: HttpClient
-  ) {
-    loggingSvce.log("Messaging Data Service constructor completed");
-  }
-}
-```
+<div class="container">
+  <div class="row">
+    <div class="col-1 p-3">
+      <span
+        class="badge"
+        [ngClass]="message.sender.isOnline ? 'bg-primary' : 'bg-secondary'"
+      >
+        {{message.sender.firstName[0]}}</span
+      >
+    </div>
+    <div class="col-8 p-3 border rounded-5">
+      <span [ngClass]="message.sender.isOnline ? 'fw-bold' : 'fw-light'">
+        {{message.text}}</span
+      >
+    </div>
+  </div>
+</div>
