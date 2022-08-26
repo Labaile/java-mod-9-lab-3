@@ -1,3 +1,4 @@
+
 import { Injectable, EventEmitter } from "@angular/core";
 import { LoggingService } from "./logging.service";
 import { Message } from "./message.model";

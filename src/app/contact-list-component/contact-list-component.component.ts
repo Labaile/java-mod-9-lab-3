@@ -9,7 +9,7 @@ import { User } from "../user.model";
 export class ContactListComponentComponent implements OnInit {
   users: User[] = [
     { firstName: "Aurelie" },
-    { firstName: "James" },
+    { firstName: "LaToya" },
     { firstName: "Jessica" },
     { firstName: "Ludovic" },
     { firstName: "Maria" },
